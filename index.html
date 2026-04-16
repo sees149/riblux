@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BlockVerse - Oyun Platformu</title>
+  <style>
+    :root {
+      --bg: #111217;
+      --panel: #1a1c24;
+      --panel-soft: #232634;
+      --text: #f5f6fb;
+      --muted: #b9bfd3;
+      --accent: #00a2ff;
+      --accent-2: #0077ff;
+      --line: #2f3346;
+      --success: #31d0aa;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(circle at top right, #1f2230, var(--bg) 45%);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.4;
+    }
+
+    .container {
+      width: min(1180px, 92vw);
+      margin: 0 auto;
+    }
+
+    .topbar {
+      border-bottom: 1px solid var(--line);
+      background: rgba(12, 13, 18, 0.8);
+      backdrop-filter: blur(6px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .logo-box {
+      width: 28px;
+      height: 28px;
+      border: 3px solid var(--text);
+      transform: rotate(12deg);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-box::after {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border: 2px solid var(--text);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 18px;
+      align-items: center;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color .2s;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: var(--text);
+    }
+
+    .btn {
+      border: none;
+      border-radius: 8px;
+      padding: 9px 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+    }
+
+    .btn.ghost {
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--text);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 28px;
+      align-items: stretch;
+      margin: 34px 0;
+    }
+
+    .hero-card {
+      background: linear-gradient(160deg, #24293a, #171923);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 30px;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+
+    .hero p {
+      color: var(--muted);
+      max-width: 560px;
+      margin-bottom: 18px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .stat h3 {
+      font-size: 1.25rem;
+      margin-bottom: 4px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 24px 0 12px;
+    }
+
+    .section-head h2 {
+      font-size: 1.35rem;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .game-card {
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform .2s ease, border-color .2s ease;
+    }
+
+    .game-card:hover {
+      transform: translateY(-4px);
+      border-color: #4f5678;
+    }
+
+    .thumb {
+      height: 118px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 11px;
+      border-radius: 999px;
+      padding: 4px 8px;
+    }
+
+    .game-content {
+      padding: 12px;
+    }
+
+    .game-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .up {
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    footer {
+      margin: 32px 0;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 920px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .games-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      nav {
+        display: none;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .games-grid,
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-inner {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand"><span class="logo-box" aria-hidden="true"></span> BlockVerse</div>
+      <nav aria-label="Ana menü">
+        <ul>
+          <li><a href="#" class="active">Keşfet</a></li>
+          <li><a href="#">Avatar</a></li>
+          <li><a href="#">Topluluk</a></li>
+          <li><a href="#">Pazar</a></li>
+        </ul>
+      </nav>
+      <button class="btn primary">Oynamaya Başla</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <article class="hero-card">
+        <h1>Milyonlarca oyuncuyla kendi dünyanı inşa et.</h1>
+        <p>
+          Bu arayüz, Roblox stilinden ilham alan örnek bir HTML/CSS demodur. Oyunları keşfet, arkadaşlarınla katıl,
+          avatarını özelleştir ve kendi evrenini yayınla.
+        </p>
+        <div class="hero-actions">
+          <button class="btn primary">Şimdi Oyna</button>
+          <button class="btn ghost">Demo İzle</button>
+        </div>
+      </article>
+
+      <aside class="stats">
+        <div class="stat">
+          <h3>78M+</h3>
+          <p>Günlük aktif oyuncu</p>
+        </div>
+        <div class="stat">
+          <h3>6.2M</h3>
+          <p>Aktif geliştirici</p>
+        </div>
+        <div class="stat">
+          <h3>34K</h3>
+          <p>Anlık canlı deneyim</p>
+        </div>
+        <div class="stat">
+          <h3>4.8/5</h3>
+          <p>Topluluk puanı</p>
+        </div>
+      </aside>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>Öne Çıkan Deneyimler</h2>
+        <button class="btn ghost">Tümünü Gör</button>
+      </div>
+      <div class="games-grid" id="gamesGrid"></div>
+    </section>
+  </main>
+
+  <footer>
+    BlockVerse, yalnızca eğitim amaçlı hazırlanmış Roblox-benzeri bir şablondur.
+  </footer>
+
+  <script>
+    const games = [
+      { title: "City Roleplay", players: "312K", rating: "97%", tag: "Roleplay", bg: "linear-gradient(135deg, #4e9af8, #3058ca)" },
+      { title: "Speed Run X", players: "94K", rating: "91%", tag: "Parkour", bg: "linear-gradient(135deg, #ff7f50, #ff2f6d)" },
+      { title: "Pixel Tycoon", players: "176K", rating: "95%", tag: "Tycoon", bg: "linear-gradient(135deg, #11c9a5, #0c8c7f)" },
+      { title: "Blade Arena", players: "221K", rating: "93%", tag: "Action", bg: "linear-gradient(135deg, #a87cff, #6c3cf1)" },
+      { title: "Zoo Builder", players: "48K", rating: "89%", tag: "Simulation", bg: "linear-gradient(135deg, #ffcb5b, #ff944b)" },
+      { title: "Sky Islands", players: "153K", rating: "94%", tag: "Adventure", bg: "linear-gradient(135deg, #61dafb, #3a77ff)" },
+      { title: "Tower Clash", players: "269K", rating: "96%", tag: "Strategy", bg: "linear-gradient(135deg, #5de0a6, #00a65f)" },
+      { title: "Pet Kingdom", players: "118K", rating: "92%", tag: "Casual", bg: "linear-gradient(135deg, #ff99d2, #ff5c90)" }
+    ];
+
+    const grid = document.getElementById("gamesGrid");
+
+    games.forEach((game) => {
+      const card = document.createElement("article");
+      card.className = "game-card";
+      card.innerHTML = `
+        <div class="thumb" style="background: ${game.bg};">
+          <span class="badge">${game.tag}</span>
+        </div>
+        <div class="game-content">
+          <h3 class="game-title">${game.title}</h3>
+          <div class="meta">
+            <span>👥 ${game.players}</span>
+            <span class="up">▲ ${game.rating}</span>
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  </script>
+</body>
+</html>
